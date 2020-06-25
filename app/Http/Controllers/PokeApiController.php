@@ -28,7 +28,7 @@ class PokeApiController extends Controller
             }
         }
 
-        return view("pokemon", ["pokemon" => json_decode($response->getBody())]);
+        return view("pokemon", ["pokemon" => $body]);
     }
 
     public function findById($id)
@@ -37,6 +37,8 @@ class PokeApiController extends Controller
         $client = new Client(['base_uri' => 'https://pokeapi.co/api/v2/']);
         // Send a request to https://pokeapi.co/api/v2/pokemon/1
         $response = $client->request('GET', 'pokemon/'.$id);
+        $body = json_decode($response->getBody());
+
         $pokemon = $this->getBody($response);
 
         $exists = Pokemon::query()->find($pokemon->id);
@@ -49,7 +51,7 @@ class PokeApiController extends Controller
             }
         }
 
-        return view("pokemon", ["pokemon" => json_decode($response->getBody())]);
+        return view("pokemon", ["pokemon" => $body]);
     }
 
     private function getBody($response){
