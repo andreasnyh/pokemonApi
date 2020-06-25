@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'PokeApiController@index');
+// ID or name works
+Route::get('/{id}', 'PokeApiController@findById');
 
 //Route::get('/pokemon', 'PokeApiController@index');
