@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Pokemon;
+use Illuminate\Support\Facades\App;
 
 class PokeApiController extends Controller
 {
@@ -35,13 +36,15 @@ class PokeApiController extends Controller
     {
         // Create a client with a base URI
         $client = new Client(['base_uri' => 'https://pokeapi.co/api/v2/']);
-        // Send a request to https://pokeapi.co/api/v2/pokemon/1
+        // Send a request to https://pokeapi.co/api/v2/pokemon/{id or name}
         $response = $client->request('GET', 'pokemon/'.$id);
+
+        // change this and rewrite frontend to use data from DB
         $body = json_decode($response->getBody());
 
         $pokemon = $this->getBody($response);
-
         $exists = Pokemon::query()->find($pokemon->id);
+
         if (!$exists) {
             try {
                 $pokemon->saveOrFail();
@@ -50,7 +53,6 @@ class PokeApiController extends Controller
                 var_dump($e);
             }
         }
-
         return view("pokemon", ["pokemon" => $body]);
     }
 
